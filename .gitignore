@@ -1,0 +1,8 @@
+*.pyc
+*.*.swp
+*.swp
+*.project
+*.settings
+*.pydevproject
+.nfs*
+.idea/

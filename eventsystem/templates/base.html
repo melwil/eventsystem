@@ -1,0 +1,20 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+
+  </head>
+  <body>
+    <ul>
+        {% if user.is_authenticated %}
+        <li><a href="{% url auth_logout %}">Log out</a></li>
+        {% else %}
+        <li><a href="{% url auth_login %}">Login</a></li>
+        <li><a href="{% url auth_register %}">Register</a></li>
+        {% endif %} 
+        <li><a href="{% url list %}">Events</a></li>
+    </ul>
+
+    {% block content %}
+    {% endblock content %}
+  </body>
+</html> 

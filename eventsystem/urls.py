@@ -1,17 +1,16 @@
-from django.conf.urls.defaults import patterns, include, url
+# -*- encoding: utf8 -*-
 
-# Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
+from django.conf.urls.defaults import *
+from django.contrib import admin
+
+admin.autodiscover()
 
 urlpatterns = patterns('',
+    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    url(r'^admin/', include(admin.site.urls)),
+    
     # Examples:
-    # url(r'^$', 'eventsystem.views.home', name='home'),
-    # url(r'^eventsystem/', include('eventsystem.foo.urls')),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
-    # url(r'^admin/', include(admin.site.urls)),
+    (r'^$',             'eventsystem.events.views.list'),
+    (r'^auth/',         include('eventsystem.auth.urls')),
+    (r'^events/',       include('eventsystem.events.urls')),
 )
