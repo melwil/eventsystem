@@ -43,6 +43,8 @@ class LoginForm(forms.Form):
 class RegisterForm(forms.Form):
     first_name = forms.CharField(label="fornavn", max_length=50)
     last_name = forms.CharField(label="etternavn", max_length=50)
+    password = forms.CharField(widget=forms.PasswordInput(render_value=False), label="password")
+    v_password = forms.CharField(widget=forms.PasswordInput(render_value=False), label="password")
     email = forms.EmailField(label="epost", max_length=50)
     study = forms.ChoiceField(label="studie", choices=FIELD_OF_STUDY_CHOICES)
 
@@ -50,9 +52,13 @@ class RegisterForm(forms.Form):
         super(RegisterForm, self).clean()
 
         cleaned_data = self.cleaned_data
+       
+        # Check passwords
+        if cleaned_data['password'] != cleaned_data['v_password']:
+            raise forms.ValidationError("Your password do not match")
 
+        # Check email suffix
         email_suffix = cleaned_data['email'].split("@")[1]
-
         if email_suffix != "stud.ntnu.no":
             raise forms.ValidationError("Your email needs to be @stud.ntnu.no")
         return cleaned_data
