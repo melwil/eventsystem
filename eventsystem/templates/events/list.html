@@ -6,7 +6,7 @@
     <table>
     {% for event in events %}
         <tr>
-            <td><a href="{{ event.get_absolute_url }}">{{ event }}</a></td><td>{{ event.start_date|date:"d.m.Y" }} - {{ event.start_date|time:"H:i" }}</td>
+            <td><a href="{{ event.get_absolute_url }}">{{ event }}</a></td><td>{{ event.start_date|time:"H:i" }} - {{ event.end_date|time:"H:i" }}</td>
         </tr>
     {% endfor %}
     </table>
