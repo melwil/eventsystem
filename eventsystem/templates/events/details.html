@@ -3,6 +3,14 @@
 {% block content %}
     <h2>{{ event.title }}</h2>
 
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
     <table>
         <tr>
             <td>Tidspunkt:</td>
@@ -20,9 +28,18 @@
             <td>Beskrivelse:</td>
             <td>{{ event.description }}</td>
         </tr>
+        <tr>
+            <td>Begrensning:</td>
+            <td>{{ event.get_restriction }}</td>
+        </tr>
     </table>
-
-    <form name="attend" method="post" action="{{ event.get_absolute_url }}">
-        <input type="submit" value="Meld meg på" />
-    </form>
+    
+    {% ifequal status 'attending' %}
+        <p>You are attending this event! <a href="{% url unattend event.id %}">Unattend</a></p>
+    {% else %}{% ifequal status 'nofree' %}
+        <p>There are no free seats for this event.</p>
+    {% else %}
+        <p>You can attend this event! <a href="{% url attend event.id %}">Attend</a></p>
+    {% endifequal %}
+    {% endifequal %}
 {% endblock content %}

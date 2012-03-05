@@ -13,4 +13,6 @@ urlpatterns = patterns('',
     (r'^$',             'eventsystem.events.views.list'),
     (r'^auth/',         include('eventsystem.auth.urls')),
     (r'^events/',       include('eventsystem.events.urls')),
+    (r'^stats/',        include('eventsystem.stats.urls')),
+    (r'^user/',         include('eventsystem.userprofile.urls')),
 )

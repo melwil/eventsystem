@@ -106,6 +106,11 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'eventsystem.urls'
 
+AUTH_PROFILE_MODULE = 'userprofile.UserProfile'
+LOGIN_URL = '/auth/login/'
+
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
+
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_ROOT_DIRECTORY, "templates"),
 )
@@ -122,6 +127,7 @@ INSTALLED_APPS = (
 
     'eventsystem.auth',
     'eventsystem.events',
+    'eventsystem.stats',
     'eventsystem.userprofile',
 )
 

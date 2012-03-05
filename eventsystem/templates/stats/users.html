@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <table>
+        <tr>
+            <td>Navn</td><td>Antall bedpresser</td>
+        </tr>
+        {% for u in users %}
+        <tr>
+            <td>{{ u.get_full_name }}</td><td>{{ u.get_profile.get_events|length }}</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+{% endblock content %}

@@ -7,9 +7,8 @@ from django.db import models
 
 class Event(models.Model):
     RESTRICTION_CHOICES = (
-        (1, "Volvox & Alk, Delta, Naturviterne"),
-        (2, "V&A, Delta, NV, HC, Nabla"),
-        (3, "Alle"),
+        (1, "Volvox & Alkymisten, Delta, Naturviterne"),
+        (2, "V&A, Delta, NV, HC, Nabla, Alle"),
     )
     title = models.CharField("tittel", max_length=50)
     start_date = models.DateTimeField("startdato")
@@ -17,9 +16,8 @@ class Event(models.Model):
     location = models.CharField("sted", max_length=50)
     description = models.TextField("beskrivelse")
     seats = models.IntegerField("plasser")
-    restriction = models.SmallIntegerField("begrensning", choices=RESTRICTION_CHOICES, default=3)
+    restriction = models.SmallIntegerField("begrensning", choices=RESTRICTION_CHOICES, default=2)
     
-
     @property
     def attendees(self):
         return map(lambda x: getattr(x, 'user'), AttendanceEntry.objects.filter(event=self))
@@ -27,6 +25,9 @@ class Event(models.Model):
     @models.permalink
     def get_absolute_url(self):
         return ('details', (), {'event_id': self.id})
+
+    def get_restriction(self):
+        return self.RESTRICTION_CHOICES[self.restriction-1][1]
 
     def __unicode__(self):
         return self.title

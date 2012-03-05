@@ -2,6 +2,9 @@
 
 from datetime import datetime
 
+from django.contrib import messages
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 
 from eventsystem.events.models import Event, AttendanceEntry
@@ -18,11 +21,44 @@ def details(request, event_id):
     context['event'] = event
 
     if request.user.is_authenticated():
-        if request.method == 'POST':
-            ae = AttendanceEntry(user=request.user, event=event)
-            ae.save()
+        attendees = event.attendees
+        if request.user in attendees:
+            context['status'] = 'attending'
+        else:
+            if len(attendees) >= event.seats:
+                context['status'] = 'nofree'
 
-    if request.user in event.attendees:
-        context['status'] = 'attending'
+    return render(request, 'events/details.html', context)
 
-    return render(request, 'events/details.html', {'event': event,})
+def attend(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    
+    if request.user.is_authenticated():
+        if request.user not in event.attendees:
+            if len(event.attendees) < event.seats:
+                if allowed(request.user, event.restriction):
+                    AttendanceEntry(user=request.user, event=event).save()
+                    messages.success(request, "You were successfully added to this event.")
+                else:
+                    messages.error(request, "You do not meet the requirements for this event.")
+
+    return HttpResponseRedirect(reverse(details, args=[event_id]))
+
+def unattend(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    
+    if request.user.is_authenticated():
+        ae = AttendanceEntry.objects.get(event=event, user=request.user)
+        if ae:
+            ae.delete()
+            messages.success(request, "You were successfully removed from this event.")
+        
+    return HttpResponseRedirect(reverse(details, args=[event_id]))
+
+def allowed(user, restriction):
+    if restriction == 1:
+        if user.get_profile().field_of_stufy <= 3:
+            return True
+    if restriction == 2:
+        return True
+    return False

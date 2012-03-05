@@ -7,6 +7,7 @@ from django.shortcuts import render
 from django.template.context import RequestContext
 
 from eventsystem.auth.forms import LoginForm, RegisterForm
+from eventsystem.userprofile.models import UserProfile
 
 def login(request):
     redirect_url = request.REQUEST.get('next', '')
@@ -38,8 +39,10 @@ def register(request):
                 username = cleaned['email'].split("@")[0]
 
                 user = User(username=username, email=cleaned['email'], first_name=cleaned['first_name'], last_name=cleaned['last_name'])
+                user.set_password(cleaned['password'])
                 user.save()
-                #user = User(username=guest.email, email=guest.email, first_name=guest.first_name, last_name=guest.last_name)
+                up = UserProfile(user=user, year=cleaned['year'], field_of_study=cleaned['study'])
+                up.save()
         else:
             form = RegisterForm()
 

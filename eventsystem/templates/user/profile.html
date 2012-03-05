@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h3>Your account</h3>
+
+    <table>
+        <tr>
+            <td>Name:</td><td>{{ user.get_full_name }}</td>
+        </tr>
+        <tr>
+            <td>Email:</td><td>{{ user.email }}</td>
+        </tr>
+        <tr>
+            <td>Linjeforening:</td><td>{{ user.get_profile.field_of_study }}</td>
+        </tr>
+        <tr>
+            <td>Year:</td><td>{{ user.get_profile.year }}</td>
+        </tr>
+    </table>
+    <hr />
+    <h3>Attending events</h3>
+
+    <table>
+        <tr>
+            <th>Number</th><th>Bedpress</th>
+        </tr>
+    {% for event in events %}
+        <tr>
+            <td>{{ forloop.counter }}</td><td>{{ event.title }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+
+{% endblock content %}

@@ -43,23 +43,33 @@ class LoginForm(forms.Form):
 class RegisterForm(forms.Form):
     first_name = forms.CharField(label="fornavn", max_length=50)
     last_name = forms.CharField(label="etternavn", max_length=50)
-    password = forms.CharField(widget=forms.PasswordInput(render_value=False), label="password")
-    v_password = forms.CharField(widget=forms.PasswordInput(render_value=False), label="password")
+    password = forms.CharField(widget=forms.PasswordInput(render_value=False), label="password", )
+    v_password = forms.CharField(widget=forms.PasswordInput(render_value=False), label="v_password")
     email = forms.EmailField(label="epost", max_length=50)
     study = forms.ChoiceField(label="studie", choices=FIELD_OF_STUDY_CHOICES)
+    year = forms.IntegerField(label="year")
 
     def clean(self):
         super(RegisterForm, self).clean()
+        if self.is_valid():
+            cleaned_data = self.cleaned_data
+           
+            # Check passwords
+            if cleaned_data['password'] != cleaned_data['v_password']:
+                raise forms.ValidationError("Your password do not match")
 
-        cleaned_data = self.cleaned_data
-       
-        # Check passwords
-        if cleaned_data['password'] != cleaned_data['v_password']:
-            raise forms.ValidationError("Your password do not match")
+            # Check email suffix and username
+            username, email_suffix = cleaned_data['email'].split("@")
+            if User.objects.filter(username=username) != []:
+                raise forms.ValidationError("There is already a user with that email")    
+            if email_suffix != "stud.ntnu.no":
+                raise forms.ValidationError("Your email needs to be @stud.ntnu.no")
 
-        # Check email suffix
-        email_suffix = cleaned_data['email'].split("@")[1]
-        if email_suffix != "stud.ntnu.no":
-            raise forms.ValidationError("Your email needs to be @stud.ntnu.no")
-        return cleaned_data
-
+            # Check year
+            year = cleaned_data['year']
+            if year < 1:
+                raise forms.ValidationError("Year can't be less than 1")
+            if year > 5:
+                raise forms.ValidationError("Year can't be more than 5. If it still should be, contact an admin.")
+            
+            return cleaned_data
