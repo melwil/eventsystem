@@ -10,13 +10,13 @@ class Event(models.Model):
         (1, "Volvox & Alkymisten, Delta, Naturviterne"),
         (2, "V&A, Delta, NV, HC, Nabla, Alle"),
     )
-    title = models.CharField("tittel", max_length=50)
-    start_date = models.DateTimeField("startdato")
-    end_date = models.DateTimeField("sluttdato")
-    location = models.CharField("sted", max_length=50)
-    description = models.TextField("beskrivelse")
-    seats = models.IntegerField("plasser")
-    restriction = models.SmallIntegerField("begrensning", choices=RESTRICTION_CHOICES, default=2)
+    title = models.CharField("title", max_length=50)
+    start_date = models.DateTimeField("start date")
+    end_date = models.DateTimeField("en date")
+    location = models.CharField("location", max_length=50)
+    description = models.TextField("description")
+    seats = models.IntegerField("seats")
+    restriction = models.SmallIntegerField("restriction", choices=RESTRICTION_CHOICES, default=2)
     
     @property
     def attendees(self):
@@ -34,8 +34,6 @@ class Event(models.Model):
 
     class Meta:
         ordering = ['start_date']
-        verbose_name = "arrangement"
-        verbose_name_plural = "arrangementer"
 
 class AttendanceEntry(models.Model):
     event = models.ForeignKey(Event)

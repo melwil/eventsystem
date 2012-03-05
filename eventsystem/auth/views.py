@@ -41,8 +41,10 @@ def register(request):
                 user = User(username=username, email=cleaned['email'], first_name=cleaned['first_name'], last_name=cleaned['last_name'])
                 user.set_password(cleaned['password'])
                 user.save()
-                up = UserProfile(user=user, year=cleaned['year'], field_of_study=cleaned['study'])
+                up = UserProfile(user=user, year=cleaned['year'], field_of_study=cleaned['study'], study_program=cleaned['field_of_study'])
                 up.save()
+
+                return HttpResponseRedirect('/')
         else:
             form = RegisterForm()
 

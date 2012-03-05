@@ -3,9 +3,11 @@
 {% block content %}
     <h2>Events</h2>
 
-    <ul>
+    <table>
     {% for event in events %}
-        <li><a href="{{ event.get_absolute_url }}">{{ event }}</a></li>
+        <tr>
+            <td><a href="{{ event.get_absolute_url }}">{{ event }}</a></td><td>{{ event.start_date|date:"d.m.Y" }} - {{ event.start_date|time:"H:i" }}</td>
+        </tr>
     {% endfor %}
-    </ul>
+    </table>
 {% endblock content %}

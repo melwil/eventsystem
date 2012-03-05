@@ -48,16 +48,19 @@ def unattend(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     
     if request.user.is_authenticated():
-        ae = AttendanceEntry.objects.get(event=event, user=request.user)
-        if ae:
-            ae.delete()
-            messages.success(request, "You were successfully removed from this event.")
+        if event.start_date <= datetime.now():
+            messages.error(request, "You cannot unattend events after they have started.")
+        else:
+            ae = AttendanceEntry.objects.get(event=event, user=request.user)
+            if ae:
+                ae.delete()
+                messages.success(request, "You were successfully removed from this event.")
         
     return HttpResponseRedirect(reverse(details, args=[event_id]))
 
 def allowed(user, restriction):
     if restriction == 1:
-        if user.get_profile().field_of_stufy <= 3:
+        if user.get_profile().field_of_study <= 3:
             return True
     if restriction == 2:
         return True

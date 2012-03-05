@@ -11,7 +11,10 @@
             <td>Email:</td><td>{{ user.email }}</td>
         </tr>
         <tr>
-            <td>Linjeforening:</td><td>{{ user.get_profile.field_of_study }}</td>
+            <td>Student union:</td><td>{{ user.get_profile.get_field_of_study }}</td>
+        </tr>
+        <tr>
+            <td>Field of study:</td><td>{{ user.get_profile.study_program }}</td>
         </tr>
         <tr>
             <td>Year:</td><td>{{ user.get_profile.year }}</td>
@@ -20,15 +23,21 @@
     <hr />
     <h3>Attending events</h3>
 
+{% if events %}
     <table>
         <tr>
-            <th>Number</th><th>Bedpress</th>
+            <th>Number</th><th>Bedpress</th><th></th>
         </tr>
     {% for event in events %}
         <tr>
-            <td>{{ forloop.counter }}</td><td>{{ event.title }}</td>
+            <td>{{ forloop.counter }}</td>
+            <td><a href="{{ event.get_absolute_url }}">{{ event.title }}</a></td>
+            <td><a href="{% url unattend event.id %}">Unattend</a></td>
         </tr>
     {% endfor %}
+{% else %}
+    <p>You are not attending any upcoming events.</p>
+{% endif %}
     </table>
 
 {% endblock content %}

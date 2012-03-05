@@ -1,16 +1,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
   <head>
-
+    <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/style.css" />
   </head>
   <body>
-    <ul>
+    <ul class="menu">
         {% if user.is_authenticated %}
-        <li><a href="{% url auth_logout %}">Log out ({{ user.username }})</a></li>
-        <li><a href="/user/profile/">Profile</a></li>
+        <li><a href="{% url auth_logout %}">Log out ({{ user.username }})</a> |</li>
+        <li><a href="/user/profile/">Profile</a> |</li>
+        {% if user.is_staff %}
+        <li><a href="/admin/">Administration</a> |</li>
+        <li><a href="/stats/">Statistics</a> |</li>
+        {% endif %}
         {% else %}
-        <li><a href="{% url auth_login %}">Login</a></li>
-        <li><a href="{% url auth_register %}">Register</a></li>
+        <li><a href="{% url auth_login %}">Login</a> |</li>
+        <li><a href="{% url auth_register %}">Register</a> |</li>
         {% endif %} 
         <li><a href="{% url list %}">Events</a></li>
     </ul>

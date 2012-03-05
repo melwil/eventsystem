@@ -41,13 +41,14 @@ class LoginForm(forms.Form):
         return False
 
 class RegisterForm(forms.Form):
-    first_name = forms.CharField(label="fornavn", max_length=50)
-    last_name = forms.CharField(label="etternavn", max_length=50)
+    first_name = forms.CharField(label="first name", max_length=50)
+    last_name = forms.CharField(label="last name", max_length=50)
     password = forms.CharField(widget=forms.PasswordInput(render_value=False), label="password", )
-    v_password = forms.CharField(widget=forms.PasswordInput(render_value=False), label="v_password")
-    email = forms.EmailField(label="epost", max_length=50)
-    study = forms.ChoiceField(label="studie", choices=FIELD_OF_STUDY_CHOICES)
+    v_password = forms.CharField(widget=forms.PasswordInput(render_value=False), label="repeat password")
+    email = forms.EmailField(label="email", max_length=50)
+    study = forms.ChoiceField(label="student union", choices=FIELD_OF_STUDY_CHOICES)
     year = forms.IntegerField(label="year")
+    field_of_study = forms.CharField(label="field of study", max_length=50)
 
     def clean(self):
         super(RegisterForm, self).clean()
@@ -60,7 +61,7 @@ class RegisterForm(forms.Form):
 
             # Check email suffix and username
             username, email_suffix = cleaned_data['email'].split("@")
-            if User.objects.filter(username=username) != []:
+            if User.objects.filter(username=username).count() > 0:
                 raise forms.ValidationError("There is already a user with that email")    
             if email_suffix != "stud.ntnu.no":
                 raise forms.ValidationError("Your email needs to be @stud.ntnu.no")

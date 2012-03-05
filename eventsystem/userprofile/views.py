@@ -8,5 +8,9 @@ from eventsystem.userprofile.models import UserProfile
 @login_required()
 def user_profile(request):
     events = request.user.get_profile().get_events()
+    context = {}
 
-    return render(request, 'user/profile.html', {'events': events})
+    if len(events) > 0:
+        context['events'] = events
+
+    return render(request, 'user/profile.html', context)
