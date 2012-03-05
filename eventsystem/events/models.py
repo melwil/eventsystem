@@ -6,11 +6,19 @@ from django.db import models
 
 
 class Event(models.Model):
+    RESTRICTION_CHOICES = (
+        (1, "Volvox & Alk, Delta, Naturviterne"),
+        (2, "V&A, Delta, NV, HC, Nabla"),
+        (3, "Alle"),
+    )
     title = models.CharField("tittel", max_length=50)
     start_date = models.DateTimeField("startdato")
+    end_date = models.DateTimeField("sluttdato")
     location = models.CharField("sted", max_length=50)
     description = models.TextField("beskrivelse")
     seats = models.IntegerField("plasser")
+    restriction = models.SmallIntegerField("begrensning", choices=RESTRICTION_CHOICES, default=3)
+    
 
     @property
     def attendees(self):

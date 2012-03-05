@@ -21,4 +21,8 @@
             <td>{{ event.description }}</td>
         </tr>
     </table>
+
+    <form name="attend" method="post" action="{{ event.get_absolute_url }}">
+        <input type="submit" value="Meld meg på" />
+    </form>
 {% endblock content %}
