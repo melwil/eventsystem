@@ -38,8 +38,11 @@
         <p>You are attending this event! <a href="{% url unattend event.id %}">Unattend</a></p>
     {% else %}{% ifequal status 'nofree' %}
         <p>There are no free seats for this event.</p>
+    {% else %}{% ifequal status 'needlogin' %}
+        <p>You need to login to see you status for this event.</p>
     {% else %}
         <p>You can attend this event! <a href="{% url attend event.id %}">Attend</a></p>
+    {% endifequal %}
     {% endifequal %}
     {% endifequal %}
 {% endblock content %}

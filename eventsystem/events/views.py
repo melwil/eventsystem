@@ -27,6 +27,8 @@ def details(request, event_id):
         else:
             if len(attendees) >= event.seats:
                 context['status'] = 'nofree'
+    else:
+        context['status'] = 'needlogin'
 
     return render(request, 'events/details.html', context)
 

@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 
-from eventsystem.events.pdfgenerator import pdf
+#from eventsystem.events.pdfgenerator import pdf
 
 urlpatterns = patterns('eventsystem.events.views',
     url(r'^$', 'list', name='list'),
