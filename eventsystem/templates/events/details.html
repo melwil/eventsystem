@@ -3,14 +3,6 @@
 {% block content %}
     <h2>{{ event.title }}</h2>
 
-    {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-
     <table>
         <tr>
             <td>Time:</td>
@@ -21,8 +13,8 @@
             <td>{{ event.location }}</td>
         </tr>
         <tr>
-            <td>Number of seats:</td>
-            <td>{{ event.seats }}</td>
+            <td>Attendees:</td>
+            <td>{{ event.attendees|length }}/{{ event.seats }}</td>
         </tr>
         <tr>
             <td>Description:</td>
