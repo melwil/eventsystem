@@ -23,7 +23,7 @@ class LoginForm(forms.Form):
             else:
                 raise forms.ValidationError("Your account is inactive, contact xxx@xxx.xxx")
         else:
-            raise forms.ValidationError("Your account does not exist or the user/password combination is incorrect.")
+            raise forms.ValidationError("Your account does not exist or the user/password combination is incorrect. Did you remember to register?"
         return self.cleaned_data
 
     def login(self, request):
