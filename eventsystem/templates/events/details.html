@@ -13,23 +13,23 @@
 
     <table>
         <tr>
-            <td>Tidspunkt:</td>
+            <td>Time:</td>
             <td>{{ event.start_date|date:"d.m.Y" }} - {{ event.start_date|time:"H:i" }}</td>
         </tr>
         <tr>
-            <td>Sted:</td>
+            <td>Location:</td>
             <td>{{ event.location }}</td>
         </tr>
         <tr>
-            <td>Antall plasser:</td>
+            <td>Number of seats:</td>
             <td>{{ event.seats }}</td>
         </tr>
         <tr>
-            <td>Beskrivelse:</td>
+            <td>Description:</td>
             <td>{{ event.description }}</td>
         </tr>
         <tr>
-            <td>Begrensning:</td>
+            <td>Restriction:</td>
             <td>{{ event.get_restriction }}</td>
         </tr>
     </table>
