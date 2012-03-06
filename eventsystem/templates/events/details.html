@@ -17,12 +17,12 @@
             <td>{{ event.attendees|length }}/{{ event.seats }}</td>
         </tr>
         <tr>
-            <td>Description:</td>
-            <td>{{ event.description }}</td>
-        </tr>
-        <tr>
             <td>Restriction:</td>
             <td>{{ event.get_restriction }}</td>
+        </tr>
+        <tr>
+            <td>Description:</td>
+            <td>{{ event.description }}</td>
         </tr>
     </table>
     
@@ -31,7 +31,7 @@
     {% else %}{% ifequal status 'nofree' %}
         <p>There are no free seats for this event.</p>
     {% else %}{% ifequal status 'needlogin' %}
-        <p>You need to login to see you status for this event.</p>
+        <p>You need to login to see your status for this event.</p>
     {% else %}
         <p>You can attend this event! <a href="{% url attend event.id %}">Attend</a></p>
     {% endifequal %}
