@@ -40,11 +40,15 @@ def attend(request, event_id):
     if request.user.is_authenticated():
         if request.user not in event.attendees:
             if len(event.attendees) < event.seats:
-                if _allowed(request.user, event.restriction):
-                    AttendanceEntry(user=request.user, event=event).save()
-                    messages.success(request, "You were successfully added to this event.")
+                profile = request.user.get_profile()
+                if event.title == 'Middag' and not profile.can_attend_dinner():
+                    messages.error(request, "You need to attend as least 2 events in order to sign up for the dinner.")
                 else:
-                    messages.error(request, "You do not meet the requirements for this event.")
+                    if _allowed(request.user, event.restriction):
+                        AttendanceEntry(user=request.user, event=event).save()
+                        messages.success(request, "You were successfully added to this event.")
+                    else:
+                        messages.error(request, "You do not meet the requirements for this event.")
 
     return HttpResponseRedirect(reverse(details, args=[event_id]))
 
@@ -56,10 +60,14 @@ def unattend(request, event_id):
         if event.start_date <= datetime.now():
             messages.error(request, "You cannot unattend events after they have started.")
         else:
-            ae = AttendanceEntry.objects.get(event=event, user=request.user)
-            if ae:
-                ae.delete()
-                messages.success(request, "You were successfully removed from this event.")
+            profile = request.user.get_profile()
+            if profile.is_attending_dinner() and len(profile.get_events()) <= 3 and event.title != 'Middag':
+                messages.error(request, "You can't attend less than 2 events when you are signed up for the dinner. Unattend the dinner first.")
+            else:
+                ae = AttendanceEntry.objects.get(event=event, user=request.user)
+                if ae:
+                    ae.delete()
+                    messages.success(request, "You were successfully removed from this event.")
         
     return HttpResponseRedirect(reverse(details, args=[event_id]))
 

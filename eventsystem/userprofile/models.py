@@ -33,5 +33,17 @@ class UserProfile(models.Model):
     def get_field_of_study(self):
         return FIELD_OF_STUDY_CHOICES[self.field_of_study - 1][1]
 
+    def is_attending_dinner(self):
+        events = self.get_events()
+
+        for event in events:
+            if event.title == 'Middag':
+                return True
+
+    def can_attend_dinner(self):
+        if self.is_attending_dinner():
+            return False
+        else:
+            return len(self.get_events()) >= 2
 
 User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
