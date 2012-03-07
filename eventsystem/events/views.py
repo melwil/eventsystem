@@ -3,6 +3,7 @@
 from datetime import datetime
 
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
@@ -32,13 +33,14 @@ def details(request, event_id):
 
     return render(request, 'events/details.html', context)
 
+@login_required
 def attend(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     
     if request.user.is_authenticated():
         if request.user not in event.attendees:
             if len(event.attendees) < event.seats:
-                if allowed(request.user, event.restriction):
+                if _allowed(request.user, event.restriction):
                     AttendanceEntry(user=request.user, event=event).save()
                     messages.success(request, "You were successfully added to this event.")
                 else:
@@ -46,6 +48,7 @@ def attend(request, event_id):
 
     return HttpResponseRedirect(reverse(details, args=[event_id]))
 
+@login_required
 def unattend(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     
@@ -60,7 +63,7 @@ def unattend(request, event_id):
         
     return HttpResponseRedirect(reverse(details, args=[event_id]))
 
-def allowed(user, restriction):
+def _allowed(user, restriction):
     if restriction == 1:
         if user.get_profile().field_of_study <= 3:
             return True
