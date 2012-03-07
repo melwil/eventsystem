@@ -46,13 +46,16 @@ def register(request):
                 user = User(username=username, email=cleaned['email'], first_name=cleaned['first_name'], last_name=cleaned['last_name'])
                 user.set_password(cleaned['password'])
                 user.is_active = False
+                user.save()
 
                 # Create the userprofile
                 up = UserProfile(user=user, year=cleaned['year'], field_of_study=cleaned['study'], study_program=cleaned['field_of_study'])
+                up.save()
 
                 # Create the registration token
                 token = uuid.uuid4().hex
                 rt = RegisterToken(user=user, token=token)
+                rt.save()
                 
                 email_message = u"""
                     You have registered an account in the event system at realfagdagen.no.
@@ -64,11 +67,6 @@ def register(request):
 
                     Feel free to contact staff from realfagdagen if you do not wish to use this link to verify your account.
                 """ % (token)
-
-                # Save the models
-                user.save()
-                up.save()
-                rt.save()
                 
                 # Send varification mail
                 send_mail('Verify your account', email_message, 'event@realfagdagen.no', [user.email,])
@@ -89,5 +87,5 @@ def verify(request, token):
 
     messages.success(request, "User '"+user.username+"' successfully activated. You can now log in.")
 
-    return HttpResponseRedirect('/')
+    return HttpResponseRedirect('http://org.ntnu.no/realfagdagen/?page_id=319')
 
