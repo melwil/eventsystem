@@ -42,17 +42,17 @@ def register(request):
                 
                 username = cleaned['email'].split("@")[0]
 
+                # Create the user
                 user = User(username=username, email=cleaned['email'], first_name=cleaned['first_name'], last_name=cleaned['last_name'])
                 user.set_password(cleaned['password'])
                 user.is_active = False
-                user.save()
 
+                # Create the userprofile
                 up = UserProfile(user=user, year=cleaned['year'], field_of_study=cleaned['study'], study_program=cleaned['field_of_study'])
-                up.save()
 
+                # Create the registration token
                 token = uuid.uuid4().hex
                 rt = RegisterToken(user=user, token=token)
-                rt.save()
                 
                 email_message = u"""
                     You have registered an account in the event system at realfagdagen.no.
@@ -65,6 +65,12 @@ def register(request):
                     Feel free to contact staff from realfagdagen if you do not wish to use this link to verify your account.
                 """ % (token)
 
+                # Save the models
+                user.save()
+                up.save()
+                rt.save()
+                
+                # Send varification mail
                 send_mail('Verify your account', email_message, 'event@realfagdagen.no', [user.email,])
 
                 return HttpResponseRedirect('/')
