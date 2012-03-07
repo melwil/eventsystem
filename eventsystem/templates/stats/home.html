@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h3>Statistics</h3>
+   
+    <h4>Users</h4>
+
+    <p><a href="{% url stats_users %}">User statistics</a></p>
+
+    <h4>Events</h4>
+
+    <table>
+        <tr>
+            <td>Event</td><td>Attendees</td>
+        </tr>
+        {% for event in events %}
+        <tr>
+            <td><a href="{% url stats_event event.id %}">{{ event.title }}</a></td><td>{{ event.attendees|length }}/{{ event.seats }}</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+{% endblock content %}

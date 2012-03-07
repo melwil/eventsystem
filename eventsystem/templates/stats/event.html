@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h3>{{ event.title }}</h3>
+
+    <table>
+        <tr>
+            <td>Name</td><td>Student union</td><td>Year</td><td>Field of study</td>
+        </tr>
+        {% for u in event.attendees %}
+        <tr>
+            <td>{{ u.get_full_name }}</td>
+            <td>{{ u.get_profile.field_of_study }}</td>
+            <td>{{ u.get_profile.year }}</td>
+            <td>{{ u.get_profile.study_program }}</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+{% endblock content %}
