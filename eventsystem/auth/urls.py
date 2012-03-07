@@ -7,4 +7,5 @@ urlpatterns = patterns('eventsystem.auth.views',
        url(r'^login/$', 'login', name='auth_login'),
        url(r'^logout/$', 'logout', name='auth_logout'),
        url(r'^register/$', 'register', name='auth_register'),
+       url(r'^verify/(\w+)/$', 'verify', name = 'auth_verify'),
 )

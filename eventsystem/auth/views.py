@@ -1,12 +1,16 @@
 # -*- coding: utf-8 -*-
 
-from django.contrib import auth
+import uuid
+
+from django.contrib import auth, messages
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.template.context import RequestContext
 
 from eventsystem.auth.forms import LoginForm, RegisterForm
+from eventsystem.auth.models import RegisterToken
 from eventsystem.userprofile.models import UserProfile
 
 def login(request):
@@ -40,13 +44,44 @@ def register(request):
 
                 user = User(username=username, email=cleaned['email'], first_name=cleaned['first_name'], last_name=cleaned['last_name'])
                 user.set_password(cleaned['password'])
+                user.is_active = False
                 user.save()
+
                 up = UserProfile(user=user, year=cleaned['year'], field_of_study=cleaned['study'], study_program=cleaned['field_of_study'])
                 up.save()
+
+                token = uuid.uuid4().hex
+                rt = RegisterToken(user=user, token=token)
+                rt.save()
+                
+                email_message = u"""
+                    You have registered an account in the event system at realfagdagen.no.
+
+                    To use your account, you need to verify it. You can do that by visiting the link below.
+                    The link is to a different site, which is the actual host for the eventsystem.
+
+                    http://absint.online.ntnu.no:6554/auth/verify/%s
+
+                    Feel free to contact staff from realfagdagen if you do not wish to use this link to verify your account.
+                """ % (token)
+
+                send_mail('Verify your account', email_message, 'event@realfagdagen.no', [user.email,])
 
                 return HttpResponseRedirect('/')
         else:
             form = RegisterForm()
 
         return render(request, 'auth/register.html', { 'form': form, })
-     
+    
+def verify(request, token):
+    rt = get_object_or_404(RegisterToken, token=token)
+
+    user = getattr(rt, 'user')
+
+    user.is_active = True
+    user.save()
+
+    messages.success(request, "User '"+user.username+"' successfully activated. You can now log in.")
+
+    return HttpResponseRedirect('/')
+

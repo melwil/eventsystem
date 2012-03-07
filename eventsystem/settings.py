@@ -31,7 +31,7 @@ DATABASES = {
 # timezone as the operating system.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'Europe/Oslo'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -115,6 +115,11 @@ MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_ROOT_DIRECTORY, "templates"),
 )
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'dworek.online.ntnu.no'
+EMAIL_PORT = 25
 
 INSTALLED_APPS = (
     'django.contrib.auth',
