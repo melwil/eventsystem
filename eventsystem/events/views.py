@@ -5,7 +5,7 @@ from datetime import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404
 
 from eventsystem.events.models import Event, AttendanceEntry
@@ -78,3 +78,13 @@ def _allowed(user, restriction):
     if restriction == 2:
         return True
     return False
+
+@login_required()
+def attendee_emails(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+
+    userlist = ""
+    for attendee in event.attendees:
+        userlist += attendee.email + ", "
+
+    return HttpResponse(userlist)
