@@ -4,7 +4,10 @@
     <h2>{{ event.title }}</h2>
 
     {% if user.is_staff %}
-        <p>View statistics for this event: <a href="{% url stats_event event.id %}">Stats</a></p>
+        <p>
+            View statistics for this event: <a href="{% url stats_event event.id %}">Stats</a><br/>
+            Download a PDF with attendees for this event: <a href="{{ event.get_absolute_url }}attendees/">PDF</a>
+        </p>
     {% endif %}
 
     <table>
