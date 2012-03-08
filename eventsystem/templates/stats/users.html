@@ -3,11 +3,11 @@
 {% block content %}
     <table>
         <tr>
-            <td>Navn</td><td>Antall events</td><td>Påmeldt middag</td>
+            <th>Name</th><th>Events attended</th><th>Attending dinner</th>
         </tr>
         {% for u in users %}
         <tr>
-            <td>{{ u.get_full_name }}</td><td>{{ u.get_profile.get_events|length }}</td><td>{% if u.get_profile.is_attending_dinner %}Ja{% endif %}</td>
+            <td>{{ u.get_full_name }}</td><td>{{ u.get_profile.get_events|length }}</td><td>{% if u.get_profile.is_attending_dinner %}Yes{% endif %}</td>
         </tr>
         {% endfor %}
 

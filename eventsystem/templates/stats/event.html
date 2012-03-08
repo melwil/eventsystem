@@ -10,7 +10,7 @@
         {% for u in event.attendees %}
         <tr>
             <td>{{ u.get_full_name }}</td>
-            <td>{{ u.get_profile.field_of_study }}</td>
+            <td>{{ u.get_profile.get_field_of_study }}</td>
             <td>{{ u.get_profile.year }}</td>
             <td>{{ u.get_profile.study_program }}</td>
         </tr>
