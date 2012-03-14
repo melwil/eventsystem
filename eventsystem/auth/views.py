@@ -63,15 +63,15 @@ def register(request):
                     To use your account, you need to verify it. You can do that by visiting the link below.
                     The link is to a different site, which is the actual host for the eventsystem.
 
-                    http://absint.online.ntnu.no:6554/auth/verify/%s/
+                    http://realfagdagen.melwil.net/auth/verify/%s/
 
                     Feel free to contact staff from realfagdagen if you do not wish to use this link to verify your account.
                 """ % (token)
                 
                 # Send varification mail
-                send_mail('Verify your account', email_message, 'event@realfagdagen.no', [user.email,])
+                send_mail('Verify your account', email_message, 'realfagdagen@gmail.com', [user.email,])
 
-                messages.success(request, "Your account has been created. Check you email for a link to verify your account. The link will be to absint.online.ntnu.no, but it is safe.")
+                messages.success(request, "Your account has been created. Check you email for a link to verify your account. The link will be to realfagdagen.melwil.net, but it is safe.")
 
                 return HttpResponseRedirect('/')
         else:
