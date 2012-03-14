@@ -7,3 +7,4 @@
 .nfs*
 .idea/
 database.db
+prod_static/
