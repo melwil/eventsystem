@@ -26,7 +26,10 @@ class UserProfile(models.Model):
 
     def get_events(self):
         return map(lambda x: getattr(x, 'event'), AttendanceEntry.objects.filter(user=self.user, event__start_date__gte=datetime.now()))
-    
+   
+    def get_all_events(self):
+        return map(lambda x: getattr(x, 'event'), AttendanceEntry.objects.filter(user=self.user))
+
     def get_number_of_events(self):
         return len(get_events())
     
@@ -34,7 +37,7 @@ class UserProfile(models.Model):
         return FIELD_OF_STUDY_CHOICES[self.field_of_study - 1][1]
 
     def is_attending_dinner(self):
-        events = self.get_events()
+        events = self.get_all_events()
 
         for event in events:
             if event.title == 'Middag':
